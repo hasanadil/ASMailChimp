@@ -167,6 +167,10 @@ static ASMailChimp* _sharedInstance;
 
 +(ASMailChimp*) sharedInstance
 {
+    if (!_sharedInstance) {
+        NSLog(@"ASMailChimp: Did you forget to call \"[ASMailChimp initializeWithApiKey:@\"My MailChimp api key\"]\"");
+        return nil;
+    }
     return _sharedInstance;
 }
 
