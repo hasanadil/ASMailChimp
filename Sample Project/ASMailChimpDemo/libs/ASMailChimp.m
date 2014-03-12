@@ -42,34 +42,19 @@
 
 -(void) addSubscriberWithEmail:(NSString*)email toList:(NSString*)listId completion:(void (^)(id result, NSError* error))completion
 {
-    NSDictionary* emailDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-                                            email, @"email",
-                                            @"", @"euid",
-                                            @"", @"leid"
-                                            ,nil];
-    NSDictionary* requestDict = [NSDictionary dictionaryWithObjectsAndKeys:
-                                    self.apiKey, @"apikey",
-                                    listId, @"id",
-                                    emailDictionary, @"email",
-                                    @"html", @"email_type",
-                                 [NSNumber numberWithBool:YES], @"double_optin",
-                                    nil];
+    NSDictionary* requestDict = @{@"apikey": self.apiKey,
+                                  @"id": listId,
+                                  @"email": @{@"email": email, @"euid": @"", @"leid": @""},
+                                  @"email_type": @"html",
+                                  @"double_optin": @YES};
     [self sendRequestFor:@"lists" withAction:@"subscribe" data:requestDict completion:completion];
 }
 
 -(void) removeSubscriberWithEmail:(NSString*)email fromList:(NSString*)listId completion:(void (^)(id result, NSError* error))completion
-{  
-    
-    NSDictionary* emailDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-                                     email, @"email",
-                                     @"", @"euid",
-                                     @"", @"leid"
-                                     ,nil];
-    NSDictionary* requestDict = [NSDictionary dictionaryWithObjectsAndKeys:
-                                 self.apiKey, @"apikey",
-                                 listId, @"id",
-                                 emailDictionary, @"email",
-                                 nil];
+{
+    NSDictionary* requestDict = @{@"apikey": self.apiKey,
+                                  @"id": listId,
+                                  @"email": @{@"email": email, @"euid": @"", @"leid": @""}};
     [self sendRequestFor:@"lists" withAction:@"unsubscribe" data:requestDict completion:completion];
 }
 
@@ -90,7 +75,7 @@
     NSString* address = [NSString stringWithFormat:@"%@%@/%@.json", [self endPointAddress], section, action];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:address]];
     [request setHTTPMethod:@"POST"];
-    [request setValue:[NSString stringWithFormat:@"%d", requestJson.length] forHTTPHeaderField:@"Content-Length"];
+    [request setValue:[NSString stringWithFormat:@"%ld", requestJson.length] forHTTPHeaderField:@"Content-Length"];
     [request setValue:@"application/x-www-form-urlencoded charset=utf-8" forHTTPHeaderField:@"Content-Type"];
     [request setHTTPBody:requestJson];
     
