@@ -34,10 +34,12 @@
 -(void) removeSubscriberWithEmail:(NSString*)email fromList:(NSString*)listId completion:(void (^)(id result, NSError* error))completion;
 
 /**
+ * Call this initializer once, likely in your AppDelegate
  */
 +(void) initializeWithApiKey:(NSString*)apiKey;
 
 /**
+ * Use this method to fetch an instance.
  */
 +(ASMailChimp*) sharedInstance;
 
